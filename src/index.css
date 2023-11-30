@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.active {
+     /* Your desired background color */
+    color: #007bff;
+    padding-left: 6 px; /* Text color for active link */
+    padding-right: 6 px; /* Text color for active link */
+  }
+  .montserrat {
+    font-family: 'Montserrat', sans-serif;
+  
+  }
+  
+  .background-gradient {
+    background: linear-gradient(to right,#04045fe3,#03039ce3, rgb(92, 169, 252));
+  }
+
+  
