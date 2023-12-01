@@ -37,7 +37,7 @@ const NewDash = () => {
                   </li>
                   <li className="px-20 cursor-pointer hover:hover:text-red-500 duration-500">
                     <a
-                      href="home"
+                      href="/home"
                       className={`px-3 ${
                         activeTable === "topup" ? "active" : ""
                       }`}
