@@ -4,9 +4,9 @@
 
 .active {
      /* Your desired background color */
-    color: #007bff;
-    padding-left: 6 px; /* Text color for active link */
-    padding-right: 6 px; /* Text color for active link */
+    color: #fff;
+    padding-left: 6 px; 
+    padding-right: 6 px; 
   }
   .montserrat {
     font-family: 'Montserrat', sans-serif;
@@ -17,4 +17,20 @@
     background: linear-gradient(to right,#04045fe3,#03039ce3, rgb(92, 169, 252));
   }
 
+
+  .activeLink {
+    background-color: #6c6f80;
+    color: #fff;
+    padding-top: 10px ;
+    padding-bottom: 6px ;
+    border-radius: 4px;
+  }
+  
+  .activeSubLink {
+    background-color: #1B1F33;
+    color: #fff;
+    padding-top: 10px ;
+    padding-bottom: 6px ;
+    border-radius: 4px;
+  }
   

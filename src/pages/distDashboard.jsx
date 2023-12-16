@@ -9,7 +9,6 @@ const Card = ({ label, value }) => (
     <div className="text-gray-700 text-2xl">{value}</div>
   </div>
 );
-console.log(Card);
 
 const NewDash = () => {
   const [activeTable, setActiveTable] = useState("distributors");
@@ -26,7 +25,7 @@ const NewDash = () => {
                 <ul className="flex space-x-3 text-black">
                   <li className="px-20 cursor-pointer hover:text-red-500 duration-500">
                     <a
-                      href="home"
+                      href="#"
                       className={`px-3 ${
                         activeTable === "distributors" ? "active" : ""
                       }`}
@@ -37,7 +36,7 @@ const NewDash = () => {
                   </li>
                   <li className="px-20 cursor-pointer hover:hover:text-red-500 duration-500">
                     <a
-                      href="/home"
+                      href="#"
                       className={`px-3 ${
                         activeTable === "topup" ? "active" : ""
                       }`}

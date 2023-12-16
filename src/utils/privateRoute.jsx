@@ -5,13 +5,13 @@ import { getToken } from "./authToken";
 
 const userAuth = () => {
   const token = getToken();
- 
+
   return token !== null;
 };
 
 const ProtectedRoutes = () => {
   const isAuth = userAuth();
-  return isAuth ? <Outlet /> : <Navigate to="/" />;
+  return isAuth ? <Outlet /> : <Navigate to="/signin" />;
 };
 
 export default ProtectedRoutes;

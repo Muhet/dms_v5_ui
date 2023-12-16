@@ -10,6 +10,8 @@ import {
   getDistProvince,
   addDistributor,
   updateDistributor,
+  updateTopup,
+  addTopup,
 } from "../redux/reducer/distributorSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Pagination, Drawer, Button, Modal, Popover } from "antd";
@@ -23,6 +25,7 @@ const Table = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [formData, setFormData] = useState({});
+  const [destributorData, setdestributorData] = useState({});
   const {
     distributors,
     distributor,
@@ -37,14 +40,14 @@ const Table = () => {
   const [pageSize, setPageSize] = useState(5);
   const [page, setPage] = useState(1);
   const [updatedData] = useState({});
-  const [setSelectedProvinceId] = useState("");
-  const [setSelectedDistrictId] = useState("");
-  const [setSelectedSectorId] = useState("");
-  const [setSelectedCellId] = useState("");
+  const [, setSelectedProvinceId] = useState("");
+  const [, setSelectedDistrictId] = useState("");
+  const [, setSelectedSectorId] = useState("");
+  const [, setSelectedCellId] = useState("");
   const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
   const [selectedDistributor, setSelectedDistributor] = useState({});
   const [isUpdateDrawerVisible, setIsUpdateDrawerVisible] = useState(false);
-  const [setIsTopupDrawerVisible] = useState(false);
+  const [isTopupDrawerVisible, setIsTopupDrawerVisible] = useState(false);
   const [selectedDistributorForEdit, setSelectedDistributorForEdit] = useState(
     {}
   );
@@ -104,20 +107,52 @@ const Table = () => {
     if (foundDistributor) {
       selectedDistributors = { ...foundDistributor };
       delete selectedDistributors.distributor_id;
+      delete selectedDistributors.dist_tin_no;
+      delete selectedDistributors.village_id;
+      delete selectedDistributors.address;
+      delete selectedDistributors.email_address;
+      delete selectedDistributors.distributor_available_balance;
+      delete selectedDistributors.telephone_number;
+      delete selectedDistributors.distributor_status;
       delete selectedDistributors.dist_company_name;
       delete selectedDistributors.dist_full_name;
       delete selectedDistributors.distributor_account_balance;
-      delete selectedDistributors.distributor_available_balance;
       delete selectedDistributors.last_update_at;
     }
 
     setIsTopupDrawerVisible(true);
-    setFormData({ ...selectedDistributors });
+    setdestributorData({ ...selectedDistributors });
   };
 
   const closeUpdateDrawer = () => {
     setIsUpdateDrawerVisible(false);
     setSelectedDistributorForEdit({});
+  };
+  const closeTopupDrawer = () => {
+    setIsTopupDrawerVisible(false);
+    setSelectedDistributorForEdit({});
+  };
+  const handleTopup = (e) => {
+    e.preventDefault();
+    const {
+      cell,
+      district,
+      province,
+      sector,
+      last_update_by,
+      last_update_to,
+      distributor_type,
+
+      ...filteredData
+    } = destributorData;
+    const combinedData = {
+      ...filteredData,
+      created_by: decode.user_id,
+      distributor_id: selectedDistributorId,
+    };
+
+    console.log("Dispatched Data", combinedData);
+    dispatch(addTopup(combinedData));
   };
   const handleUpdate = (e) => {
     e.preventDefault();
@@ -167,6 +202,14 @@ const Table = () => {
       setFormData(updatedData[0]);
     }
   }, [distributor, updatedData]);
+  const handleOnDestChange = (key, value) => {
+    setdestributorData((e) => ({
+      ...destributorData,
+      [key]: value,
+    }));
+
+    setPartnerIdFilled(!!value);
+  };
   const handleOnChange = (key, value) => {
     setFormData((e) => ({
       ...formData,
@@ -183,8 +226,6 @@ const Table = () => {
   useEffect(() => {
     dispatch(getProvinces(currentPage, pageSize));
   }, [dispatch, currentPage, pageSize]);
-
-  console.log("Provinces", distProvince);
 
   const handlePageSizeChange = (size) => {
     setPageSize(size);
@@ -205,10 +246,7 @@ const Table = () => {
   const userDistributors = distributors.filter(
     (distributor) => distributor.last_update_by === decode.user_id
   );
-  console.log("GET :: Distributor>>>> ID", distributor.distributor_id);
-  console.log("GET ::User ID >>>", distributors.distributor_id);
-  console.log("GET :: Distributor>>>>", distributors);
-  console.log("GET :: Single Distributor>>>>", userDistributors);
+
   return (
     <div className="">
       <Header />
@@ -307,7 +345,7 @@ const Table = () => {
                                       )
                                     }
                                   >
-                                    Topup
+                                    Update
                                   </label>
                                   <label
                                     className="cursor-pointer px-3 hover:text-green-400"
@@ -317,7 +355,7 @@ const Table = () => {
                                       )
                                     }
                                   >
-                                    Update
+                                    Topup
                                   </label>
                                 </div>
                               }
@@ -535,7 +573,6 @@ const Table = () => {
                   }}
                   className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-xs sm:leading-6"
                 >
-                  <option value="">---Select---</option>
                   {provinces &&
                     provinces.map((province) => (
                       <option
@@ -985,8 +1022,8 @@ const Table = () => {
                     className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-xs sm:leading-6"
                   >
                     <option value="">---Select----</option>
-                    <option value="Yes">active</option>
-                    <option value="No">inactive</option>
+                    <option value="active">active</option>
+                    <option value="inactive">inactive</option>
                   </select>
                 </div>
               </div>
@@ -997,6 +1034,149 @@ const Table = () => {
                     type="submit"
                     className="flex w-full justify-center rounded-md bg-green-400 px-3 py-1.5 text-xs font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     onClick={handleUpdate}
+                  >
+                    {selectedDistributorForEdit.distributor_id
+                      ? "Update"
+                      : "Register"}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </Drawer>
+        )}
+        {isTopupDrawerVisible && (
+          <Drawer
+            title="TopUp Distributor"
+            placement="right"
+            closable={true}
+            onClose={closeTopupDrawer}
+            visible={isTopupDrawerVisible}
+            width={450}
+          >
+            <form className="space-y-6" action="#" method="PUT">
+              <ToastContainer position="top-right" autoClose={5000} />
+              <div>
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-medium leading-6 text-gray-900">
+                    DestributorID
+                  </label>
+                </div>
+                <div className="mt-1">
+                  <input
+                    type="text"
+                    value={selectedDistributorId}
+                    onChange={(e) =>
+                      handleOnChange("distributor_id", e.target.value)
+                    }
+                    readOnly
+                    className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 bg-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-xs sm:leading-6"
+                  />
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-medium leading-6 text-gray-900">
+                    Topup Amount
+                  </label>
+                </div>
+                <div className="mt-1">
+                  <input
+                    type="text"
+                    value={destributorData.amount_paid}
+                    onChange={(e) =>
+                      handleOnDestChange("amount_paid", e.target.value)
+                    }
+                    required
+                    className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-xs sm:leading-6"
+                  />
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-medium leading-6 text-gray-900">
+                    Payment Mode
+                  </label>
+                </div>
+                <div className="mt-1">
+                  <input
+                    type="text"
+                    value={destributorData.mode_of_payment}
+                    onChange={(e) =>
+                      handleOnDestChange("mode_of_payment", e.target.value)
+                    }
+                    required
+                    className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-xs sm:leading-6"
+                  />
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-medium leading-6 text-gray-900">
+                    Drawers Bank
+                  </label>
+                </div>
+                <div className="mt-1">
+                  <input
+                    type="text"
+                    value={destributorData.drawers_bank}
+                    onChange={(e) =>
+                      handleOnDestChange("drawers_bank", e.target.value)
+                    }
+                    required
+                    className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-xs sm:leading-6"
+                  />
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-medium leading-6 text-gray-900">
+                    Cheque number
+                  </label>
+                </div>
+                <div className="mt-1">
+                  <input
+                    type="text"
+                    value={destributorData.cheque_no}
+                    onChange={(e) =>
+                      handleOnDestChange("cheque_no", e.target.value)
+                    }
+                    required
+                    className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-xs sm:leading-6"
+                  />
+                </div>
+              </div>
+              {/* 
+              <div>
+                <div className="flex items-center justify-between">
+                  <label
+                    htmlFor="address"
+                    className="block text-xs font-medium leading-6 text-gray-900"
+                  >
+                    Request Status
+                  </label>
+                </div>
+                <div className="mt-1">
+                  <br />
+                  <select
+                    type="text"
+                    value={destributorData?.request_status}
+                    onChange={(e) =>
+                      handleOnDestChange("request_status", e.target.value)
+                    }
+                    className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-xs sm:leading-6"
+                  >
+                    <option value="">---Select----</option>
+                    <option value="pending">pending</option>
+                    <option value="conceled">canceled</option>
+                  </select>
+                </div>
+              </div> */}
+              <div>
+                <div>
+                  <button
+                    type="submit"
+                    className="flex w-full justify-center rounded-md bg-green-400 px-3 py-1.5 text-xs font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    onClick={handleTopup}
                   >
                     {selectedDistributorForEdit.distributor_id
                       ? "Update"

@@ -3,13 +3,27 @@ import HttpRequest from "../../services/HttpRequest";
 import { toast } from "react-toastify";
 import io from "socket.io-client";
 
-const socket = io(`${process.env.REACT_APP_BASE_URL_LOCAL}`);
+/* const socket = io(`${process.env.REACT_APP_BASE_URL_LOCAL}`); */
 export const getTellers = createAsyncThunk(
   "tellers/getTellers",
   async (page) => {
     try {
       const response = await HttpRequest.get(
         `${process.env.REACT_APP_BASE_URL_LOCAL}/tellers`
+      );
+
+      return response.data;
+    } catch (error) {
+      throw new Error("Failed to fetch distributors");
+    }
+  }
+);
+export const getTellerTopups = createAsyncThunk(
+  "tellers/getTellerTopups",
+  async () => {
+    try {
+      const response = await HttpRequest.get(
+        `${process.env.REACT_APP_BASE_URL_LOCAL}/tellertopup`
       );
 
       return response.data;
@@ -44,7 +58,7 @@ export const addTeller = createAsyncThunk(
       );
 
       if (response?.data) {
-        socket.send(JSON.stringify({ type: "newTeller", data: response.data }));
+        /*     socket.send(JSON.stringify({ type: "newTeller", data: response.data })); */
         toast.success(response?.resp_msg);
         return response.data;
       }
@@ -105,7 +119,7 @@ export const updateTeller = createAsyncThunk(
       } = response.data;
 
       if (response?.data) {
-        socket.send(JSON.stringify({ type: "newTeller", data: response.data }));
+        /*    socket.send(JSON.stringify({ type: "newTeller", data: response.data })); */
         toast.success(response.resp_msg);
         return {
           distributor_id,
@@ -136,6 +150,7 @@ const tellerSlice = createSlice({
     tellerByDistId: [],
     teller: [],
     tellertopup: [],
+    tellertopups: [],
     loading: false,
   },
   reducers: {},
@@ -149,6 +164,16 @@ const tellerSlice = createSlice({
         state.tellers = action.payload;
       })
       .addCase(getTellers.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(getTellerTopups.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getTellerTopups.fulfilled, (state, action) => {
+        state.loading = false;
+        state.tellertopups = action.payload;
+      })
+      .addCase(getTellerTopups.rejected, (state) => {
         state.loading = false;
       })
       .addCase(addTeller.pending, (state) => {

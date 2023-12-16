@@ -35,11 +35,11 @@ const authSlice = createSlice({
         const decodedToken = jwtDecode(action.payload.data.access_token);
         state.access_level = decodedToken.access_level;
         if (state.access_level === "D") {
-          window.location.href = "/dist_dashboard";
+          window.location.href = "/distributors";
         } else if (state.access_level === "T") {
-          window.location.href = "/teller_dashboard";
+          window.location.href = "/teller_list";
         } else {
-          window.location.href = "/dist_dashboard";
+          window.location.href = "/distributors";
         }
 
         state.role = action.payload;

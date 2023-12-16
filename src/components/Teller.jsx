@@ -25,7 +25,7 @@ const Table = () => {
   const [pageSize, setPageSize] = useState(5);
   const [page, setPage] = useState(1);
   const [updatedData] = useState({});
-  const [setTableHeight] = useState("");
+  const [, setTableHeight] = useState("");
   const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
   const [selectedDistributor, setSelectedDistributor] = useState({});
   const [isUpdateDrawerVisible, setIsUpdateDrawerVisible] = useState(false);
@@ -143,12 +143,10 @@ const Table = () => {
     };
     try {
       dispatch(addTeller(combinedData));
-      // If the request is successful, close the drawer
       setIsModalVisible(false);
     } catch (error) {
       console.error("Error:", error);
     }
-    /* dispatch(addTeller(combinedData)); */
   };
   const token = getToken();
   const decode = jwtDecode(token);

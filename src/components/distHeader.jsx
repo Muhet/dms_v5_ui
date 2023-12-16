@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 import { IoIosNotifications } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
 import "typeface-inter";
-import { Drawer } from "antd"; // Import necessary Ant Design components
+import { Drawer } from "antd";
 import { getData } from "./../utils/authToken";
 import Table from "./Table";
 import DistTable from "./distTable";
@@ -118,7 +118,7 @@ const Header = () => {
                   <NavLink
                     to={
                       parentOption.menu_title === "Teller Management"
-                        ? "/dist_dashboard"
+                        ? "/dist_list"
                         : "#"
                     }
                   >
@@ -126,7 +126,7 @@ const Header = () => {
                   </NavLink>
 
                   {activeDropdown === index && parentOption.children && (
-                    <div className="absolute -ml-10  mt-4 font-light text-black w-96 bg-white items-center rounded-b-lg shadow-lg">
+                    <div className="absolute -ml-10 mt-4 font-light text-black w-max bg-white items-center rounded-b-lg shadow-lg">
                       <ul className="flex">
                         {parentOption.children
                           .filter(
@@ -135,12 +135,12 @@ const Header = () => {
                           .map((childOption, childIndex) => (
                             <li
                               key={childIndex}
-                              className=" py-2 border-b px-4 hover:bg-gray-50  hover:text-black text-sm"
+                              className="text-white py-2 border-b px-4 hover:text-black text-sm"
                             >
                               <NavLink
                                 to={childOption.load_page}
                                 onClick={
-                                  childOption.menu_title === "new Teller"
+                                  childOption.menu_title === "New Teller"
                                     ? showDrawer
                                     : childOption.menu_title ===
                                       "New Distributor"
