@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
-import { CiWallet } from "react-icons/ci";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin, Modal, Popover } from "antd";
 import { ToastContainer } from "react-toastify";
@@ -8,8 +7,12 @@ import "react-toastify/dist/ReactToastify.css";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { MdOutlineModeEdit, MdOutlineDeleteSweep } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { getTellerTopups } from "../../redux/reducer/tellerSlice";
-import { getDistributors } from "../../redux/reducer/distributorSlice";
+import {
+  getTellerTopups,
+  addTeller,
+  topupTeller,
+  updateTeller,
+} from "../../redux/reducer/tellerSlice";
 import { format } from "date-fns";
 import { getToken } from "../../utils/authToken";
 import jwtDecode from "jwt-decode";
@@ -23,36 +26,21 @@ const antIcon = (
   />
 );
 
-const distributorTable = () => {
+const DistributorTable = () => {
   const dispatch = useDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [setFilteredDistributors] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [, setSearchTerm] = useState("");
   const [formData, setFormData] = useState({});
-  const { tellers, teller, tellertopups, loading } = useSelector(
+  const { tellers, tellertopups, loading } = useSelector(
     (state) => state.tellers
   );
-  const [isLoading, setIsLoading] = useState(false);
+  const [, setIsLoading] = useState(false);
 
   const [, setPartnerIdFilled] = useState(true);
-  const [pageSize, setPageSize] = useState(5);
-  const [page, setPage] = useState(1);
   const [, updatedData] = useState({});
-  const [, setTableHeight] = useState("");
-  const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
-  const [selectedDistributor, setSelectedDistributor] = useState({});
-  const [isUpdateDrawerVisible, setIsUpdateDrawerVisible] = useState(false);
-  const [selectedDistributorForEdit, setSelectedDistributorForEdit] = useState(
-    {}
-  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDistributorId, setSelectedDistributorId] = useState(null);
-  const [verificationRequest, setVerificationRequest] = useState({});
-  const [selectedRadio, setSelectedRadio] = useState("");
   const [showNewDistributorForm, setShowNewDistributorForm] = useState(false);
   const [showTellerUpdateForm, setShowTellerUpdateForm] = useState(false);
-  const [newDistributorFormData, setNewDistributorFormData] = useState({});
   const [selectedTellerId, setSelectedTellerId] = useState(null);
   let selectedDistributors = null;
   let selectedTellers = null;
@@ -62,6 +50,11 @@ const distributorTable = () => {
   const handleNewDistributorClick = () => {
     setShowNewDistributorForm(true);
   };
+  console.log(handleNewDistributorClick);
+  const openTopupDrawer = () => {
+    setShowNewDistributorForm(true);
+  };
+
   const handleOpenTellerUpdateForm = (pdt_id) => {
     setSelectedTellerId(pdt_id);
     const foundTeller = tellers.find((distrib) => distrib.teller_id === pdt_id);
@@ -84,24 +77,7 @@ const distributorTable = () => {
       setFormData(updatedData[0]);
     }
   }, [tellertopups, updatedData]);
-  /*   const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    const combinedData = {
-      ...formData,
-      created_by: decode.user_id,
-      distributor_id: decode.user_id,
-    };
-    try {
-      dispatch(addTeller(combinedData));
-      setTimeout(() => {
-        setShowNewDistributorForm(false);
-      }, 5000);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-    setIsLoading(false);
-  }; */
+
   const handleTellerUpdate = (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -169,6 +145,8 @@ const distributorTable = () => {
     setIsModalOpen(true);
     setFormData({ ...selectedDistributors });
   };
+  console.log(showModal);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -205,24 +183,12 @@ const distributorTable = () => {
   useEffect(() => {
     dispatch(getTellerTopups());
   }, [dispatch]);
-  const userTellers = tellers.filter(
-    (teller) => teller && teller.distributor_id === decode.user_id
-  );
+
   console.log("topups:::::", tellertopups);
   return (
     <div className="text-xs">
       <ToastContainer position="top-right" autoClose={5000} />{" "}
       <label className="font-normal">Teller Topups</label>
-      {/*    <div className="flex justify-between">
-       
-        <button
-          className="text-xs bg-custom-light-blue font-light
-         text-custom-white px-4 py-3 rounded-md "
-          onClick={handleNewDistributorClick}
-        >
-          Topup Acount
-        </button>
-      </div> */}
       <Modal
         title={
           <div
@@ -238,39 +204,7 @@ const distributorTable = () => {
         visible={isModalOpen}
         onOk={handleSubmitTopup}
         onCancel={handleCancel}
-      >
-        {/*   <form>
-          <ToastContainer position="top-right" autoClose={5000} />
-          <div className="mb-5">
-            <label className="text-gray-500">
-              Account Name / Teller ID{" "}
-              <span className="text-custom-red">*</span>
-            </label>
-
-            <input
-              type="text"
-              value={selectedDistributorId}
-              onChange={(e) => handleOnChange("user_name", e.target.value)}
-              placeholder="E.g: 12345"
-              className="block w-full mt-2 outline-none rounded-md px-4 py-2 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-xs sm:leading-6"
-            />
-          </div>
-          <div className="mb-5">
-            <label className="text-gray-500">
-              Top Up Amount <span className="text-custom-red">*</span>
-            </label>
-
-            <input
-              type="text"
-              value={formData.topup_amount}
-              onChange={(e) => handleOnChange("topup_amount", e.target.value)}
-              required
-              placeholder="E.g: 50000"
-              className="block w-full mt-2 outline-none rounded-md px-4 py-2 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-xs sm:leading-6"
-            />
-          </div>
-        </form> */}
-      </Modal>
+      ></Modal>
       {showNewDistributorForm && (
         <div>
           <form className="bg-custom-white p-4 mt-5 rounded-md text-sm space-y-4">
@@ -596,4 +530,4 @@ const distributorTable = () => {
     </div>
   );
 };
-export default distributorTable;
+export default DistributorTable;

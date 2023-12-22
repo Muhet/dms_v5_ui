@@ -1,23 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import HttpRequest from "../../services/HttpRequest";
 import { toast } from "react-toastify";
-import io from "socket.io-client";
 
 /* const socket = io(`${process.env.REACT_APP_BASE_URL_LOCAL}`); */
-export const getTellers = createAsyncThunk(
-  "tellers/getTellers",
-  async (page) => {
-    try {
-      const response = await HttpRequest.get(
-        `${process.env.REACT_APP_BASE_URL_LOCAL}/tellers`
-      );
+export const getTellers = createAsyncThunk("tellers/getTellers", async () => {
+  try {
+    const response = await HttpRequest.get(
+      `${process.env.REACT_APP_BASE_URL_LOCAL}/tellers`
+    );
 
-      return response.data;
-    } catch (error) {
-      throw new Error("Failed to fetch distributors");
-    }
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch distributors");
   }
-);
+});
 export const getTellerTopups = createAsyncThunk(
   "tellers/getTellerTopups",
   async () => {

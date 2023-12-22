@@ -24,23 +24,18 @@ const antIcon = (
     spin
   />
 );
-const newTellerDashboard = () => {
+const NewTellerDashboard = () => {
   const [setIsModalVisible] = useState(false);
   const [user_name, setUser_name] = useState("");
   const [password, setPassword] = useState("");
   const [, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
-  const { tellers, teller, tellertopup, loading } = useSelector(
-    (state) => state.tellers
-  );
+  const { loading } = useSelector((state) => state.tellers);
+  const location = useLocation();
   const [, setPartnerIdFilled] = useState(true);
-  const [isDrawerVisible, setIsDrawerVisible] = useState(false);
-  const [isDrawerDisVisible, setIsDrawerDisVisible] = useState(false);
-  const [isDrawerMegaVisible, setIsDrawerMegaVisible] = useState(false);
+  const [, setIsDrawerMegaVisible] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [isUserPopupVisible, setUserPopupVisible] = useState(false);
-  const [isWebSettingsVisible, setIsWebSettingsVisible] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const userData = getData().data?.menu_list;
   const [showPopModal, setShowPopModal] = useState(false);
@@ -53,23 +48,7 @@ const newTellerDashboard = () => {
   const handleModalClose = () => {
     setShowPopModal(false);
   };
-  const showUserPopup = () => {
-    setUserPopupVisible(true);
-  };
 
-  const hideUserPopup = () => {
-    setUserPopupVisible(false);
-  };
-  const showWebSettings = () => {
-    setIsWebSettingsVisible(true);
-  };
-
-  const hideWebSettings = () => {
-    setIsWebSettingsVisible(false);
-  };
-  const showDrawer = () => {
-    setIsDrawerVisible(true);
-  };
   const handleOnChange = (key, value) => {
     setFormData(() => ({
       ...formData,
@@ -78,14 +57,7 @@ const newTellerDashboard = () => {
 
     setPartnerIdFilled(!!value);
   };
-  const closeDrawer = () => {
-    setIsDrawerVisible(false);
-    setIsDrawerDisVisible(false);
-    setIsDrawerMegaVisible(false);
-  };
-  const showDrawerDis = () => {
-    setIsDrawerDisVisible(true);
-  };
+
   const showDrawerMega = () => {
     setIsDrawerMegaVisible(true);
   };
@@ -385,4 +357,4 @@ const newTellerDashboard = () => {
     </div>
   );
 };
-export default newTellerDashboard;
+export default NewTellerDashboard;

@@ -6,7 +6,7 @@ import Dist from "./../assets/images/icons/distributors.png";
 import Tellers from "./../assets/images/icons/tellers.png";
 import Header from "../components/newHeader";
 import RequestList from "../components/tables/request_table";
-const newTellerDashboard = () => {
+const NewTellerDashboard = () => {
   return (
     <div className="bg-custom-dark-blue h-screen font-poppins">
       <div className="flex gap-1">
@@ -22,25 +22,25 @@ const newTellerDashboard = () => {
           <div className="text-custom-gray mx-3 mt-20">
             <ul className="my-4">
               <li className="my-7">
-                <a href="" className="flex gap-2">
+                <a href="/home" className="flex gap-2">
                   <img src={Trans} alt="trans" className="h-fit" />
                   <p>Overview</p>
                 </a>
               </li>
               <li className="my-7">
-                <a href="" className="flex gap-2">
+                <a href="/transaction" className="flex gap-2">
                   <img src={Trans} alt="trans" className="h-fit" />
                   <p>Transactions</p>
                 </a>
               </li>
               <li className="my-7">
-                <a href="" className="flex gap-2">
+                <a href="/requests" className="flex gap-2">
                   <img src={Subsc} alt="trans" className="h-fit" />
                   <p>Requests</p>
                 </a>
               </li>
               <li className="my-7">
-                <a href="" className="flex gap-2 my-3">
+                <a href="/analyse" className="flex gap-2 my-3">
                   <img src={UsageAn} alt="trans" className="h-fit" />
                   <p>Usage Analysis</p>
                 </a>
@@ -52,7 +52,7 @@ const newTellerDashboard = () => {
             <ul className="my-4 ">
               <li className="my-2">
                 <a
-                  href=""
+                  href="/home"
                   className="flex gap-2 hover:bg-custom-white duration-700 hover:bg-opacity-30 p-3 rounded-lg"
                 >
                   <img src={Dist} alt="trans" className="h-fit" />
@@ -61,7 +61,7 @@ const newTellerDashboard = () => {
               </li>
               <li className="my-2">
                 <a
-                  href=""
+                  href="/distributors"
                   className="flex gap-2 hover:bg-custom-white duration-700 hover:bg-opacity-30 p-3 rounded-lg"
                 >
                   <img src={Tellers} alt="trans" className="h-fit" />
@@ -84,4 +84,4 @@ const newTellerDashboard = () => {
     </div>
   );
 };
-export default newTellerDashboard;
+export default NewTellerDashboard;

@@ -1,40 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { Checkbox } from "antd";
+
 import { FaCircleExclamation } from "react-icons/fa6";
 import { GoCheckCircleFill } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
 import { getDistributors } from "../../redux/reducer/distributorSlice";
-import StepOne from "../../assets/images/icons/check.png";
 import StepTwo from "../../assets/images/icons/Rectangle 2113.png";
 import { getToken } from "../../utils/authToken";
 import jwtDecode from "jwt-decode";
-const distributorTable = ({ setSearchTerm }) => {
+const DistributorTable = () => {
   const dispatch = useDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
-  const [page, setPage] = useState(1);
+  const [currentPage] = useState(1);
+  const [pageSize] = useState(5);
   const [step, setStep] = useState(1);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [, setSelectedSectorId] = useState("");
   const [formData, setFormData] = useState({});
-  const [destributorData, setdestributorData] = useState({});
-  const [showForm, setShowForm] = useState(false);
-  const {
-    distributors,
-    distributor,
-    provinces,
-    distProvince,
-    district,
-    sector,
-    cell,
-  } = useSelector((state) => state.distributors);
+  const { district } = useSelector((state) => state.distributors);
   const access_token = getToken();
   const decode = jwtDecode(access_token);
   useEffect(() => {
     dispatch(getDistributors(currentPage, pageSize));
   }, [dispatch, currentPage, pageSize]);
-  const userDistributors = distributors.filter(
-    (distributor) => distributor.last_update_by === decode.user_id
-  );
+
   const handleNextButtonClick = () => {
     if (step === 1) {
       setStep(2);
@@ -45,7 +32,7 @@ const distributorTable = ({ setSearchTerm }) => {
       setStep(1);
     }
   };
-
+  console.log(decode);
   const handleOnChange = (field, value) => {
     setFormData((prevData) => ({ ...prevData, [field]: value }));
   };
@@ -465,4 +452,4 @@ const distributorTable = ({ setSearchTerm }) => {
     </div>
   );
 };
-export default distributorTable;
+export default DistributorTable;

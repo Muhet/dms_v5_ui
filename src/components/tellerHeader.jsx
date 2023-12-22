@@ -83,10 +83,10 @@ const Header = () => {
                       className="py-2 border-b w-fit px-4 hover:bg-gradient-to-r from-blue-800 to-blue-500 hover:text-white"
                       /*  onClick={showDrawer} */
                     >
-                      <a href="#">Renew Subscription</a>
+                      <a href="home">Renew Subscription</a>
                     </li>
                     <li className="py-2 border-b hover:bg-gradient-to-r from-blue-800 to-blue-500 hover:text-white">
-                      <a href="#">
+                      <a href="home">
                         <NavLink to="/teller_dashboard">
                           Sale Accessories
                         </NavLink>
@@ -96,10 +96,10 @@ const Header = () => {
                       className="py-2 border-b px-4 hover:bg-gradient-to-r from-blue-800 to-blue-500 hover:text-white"
                       /*   onClick={showtTellerTopup} */
                     >
-                      <a href="#">New Subscriber</a>
+                      <a href="home">New Subscriber</a>
                     </li>
                     <li className="py-2 border-b px-4 hover:bg-gradient-to-r from-blue-800 to-blue-500 hover:text-white">
-                      <a href="#">Sales Summary</a>
+                      <a href="home">Sales Summary</a>
                     </li>
                   </ul>
                 </div>
@@ -110,15 +110,15 @@ const Header = () => {
               onMouseEnter={showDropdown2}
               onMouseLeave={hideDropdown2}
             >
-              <a href="#">Teller Sales</a>
+              <a href="home">Teller Sales</a>
               {isDropdownVisible2 && (
                 <div className="absolute -ml-10 w-fit mt-3  font-light text-black bg-white items-center rounded-b-lg shadow-lg">
                   <ul>
                     <li className="py-2 border-b px-4 hover:bg-gradient-to-r from-blue-800 to-blue-500 hover:text-white">
-                      <a href="#">Daily Sales Report</a>
+                      <a href="home">Daily Sales Report</a>
                     </li>
                     <li className="py-2 border-b px-4 hover:bg-gradient-to-r from-blue-800 to-blue-500 hover:text-white">
-                      <a href="#">Active Batch</a>
+                      <a href="home">Active Batch</a>
                     </li>
                   </ul>
                 </div>

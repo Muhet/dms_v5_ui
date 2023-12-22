@@ -3,7 +3,7 @@ import Header from "../components/newHeader";
 import "react-toastify/dist/ReactToastify.css";
 import NavBar from "../components/Navbar/nav_bar";
 import DistList from "../components/tables/distributor_table";
-const newDashboard = () => {
+const NewDashboard = () => {
   return (
     <div className="bg-custom-dark-blue h-screen font-poppins">
       <div className="flex gap-1">
@@ -26,4 +26,4 @@ const newDashboard = () => {
     </div>
   );
 };
-export default newDashboard;
+export default NewDashboard;

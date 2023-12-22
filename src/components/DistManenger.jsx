@@ -98,31 +98,7 @@ const Table = () => {
     setIsUpdateDrawerVisible(true);
     setFormData({ ...selectedDistributors });
   };
-  const openTopupDrawer = (pdt_id) => {
-    setSelectedDistributorId(pdt_id);
-
-    const foundDistributor = distributors.find(
-      (distrib) => distrib.distributor_id === pdt_id
-    );
-    if (foundDistributor) {
-      selectedDistributors = { ...foundDistributor };
-      delete selectedDistributors.distributor_id;
-      delete selectedDistributors.dist_tin_no;
-      delete selectedDistributors.village_id;
-      delete selectedDistributors.address;
-      delete selectedDistributors.email_address;
-      delete selectedDistributors.distributor_available_balance;
-      delete selectedDistributors.telephone_number;
-      delete selectedDistributors.distributor_status;
-      delete selectedDistributors.dist_company_name;
-      delete selectedDistributors.dist_full_name;
-      delete selectedDistributors.distributor_account_balance;
-      delete selectedDistributors.last_update_at;
-    }
-
-    setIsTopupDrawerVisible(true);
-    setdestributorData({ ...selectedDistributors });
-  };
+  const openTopupDrawer = (pdt_id) => {};
 
   const closeUpdateDrawer = () => {
     setIsUpdateDrawerVisible(false);

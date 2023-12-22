@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
-import { Pagination, Drawer, Button, Modal, Popover } from "antd";
+import { Pagination, Popover } from "antd";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CiWallet } from "react-icons/ci";
@@ -13,18 +13,16 @@ import {
   getDistrict,
   getSector,
   getCell,
-  addTopup,
   getDistProvince,
   addDistributor,
   updateDistributor,
 } from "../../redux/reducer/distributorSlice";
 import { getToken } from "../../utils/authToken";
 import jwtDecode from "jwt-decode";
-const distributorTable = ({ setSearchTerm }) => {
+const DistributorTable = ({ setSearchTerm }) => {
   const dispatch = useDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
-  const [page, setPage] = useState(1);
+  const [currentPage] = useState(1);
+  const [pageSize] = useState(5);
   const [, setPartnerIdFilled] = useState(true);
   const [, updatedData] = useState({});
   const [, setSelectedProvinceId] = useState("");
@@ -106,6 +104,7 @@ const distributorTable = ({ setSearchTerm }) => {
     setShowUpdateDistributorForm(true);
     setFormData({ ...selectedDistributors });
   };
+  const openTopupDrawer = () => {};
   const handleTopUpDistributor = (pdt_id) => {
     setSelectedDistributorId(pdt_id);
     const foundDistributor = distributors.find(
@@ -910,4 +909,4 @@ const distributorTable = ({ setSearchTerm }) => {
     </div>
   );
 };
-export default distributorTable;
+export default DistributorTable;

@@ -25,23 +25,17 @@ const antIcon = (
     spin
   />
 );
-const newTellerDashboard = () => {
+const NewTellerDashboard = () => {
   const [setIsModalVisible] = useState(false);
   const [user_name, setUser_name] = useState("");
   const [password, setPassword] = useState("");
   const [, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
-  const { tellers, teller, tellertopups, loading } = useSelector(
-    (state) => state.tellers
-  );
+  const { loading } = useSelector((state) => state.tellers);
   const [, setPartnerIdFilled] = useState(true);
-  const [isDrawerVisible, setIsDrawerVisible] = useState(false);
-  const [isDrawerDisVisible, setIsDrawerDisVisible] = useState(false);
-  const [isDrawerMegaVisible, setIsDrawerMegaVisible] = useState(false);
+  const [, setIsDrawerMegaVisible] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [isUserPopupVisible, setUserPopupVisible] = useState(false);
-  const [isWebSettingsVisible, setIsWebSettingsVisible] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const userData = getData().data?.menu_list;
   const [showPopModal, setShowPopModal] = useState(false);
@@ -54,23 +48,7 @@ const newTellerDashboard = () => {
   const handleModalClose = () => {
     setShowPopModal(false);
   };
-  const showUserPopup = () => {
-    setUserPopupVisible(true);
-  };
 
-  const hideUserPopup = () => {
-    setUserPopupVisible(false);
-  };
-  const showWebSettings = () => {
-    setIsWebSettingsVisible(true);
-  };
-
-  const hideWebSettings = () => {
-    setIsWebSettingsVisible(false);
-  };
-  const showDrawer = () => {
-    setIsDrawerVisible(true);
-  };
   const handleOnChange = (key, value) => {
     setFormData(() => ({
       ...formData,
@@ -79,14 +57,7 @@ const newTellerDashboard = () => {
 
     setPartnerIdFilled(!!value);
   };
-  const closeDrawer = () => {
-    setIsDrawerVisible(false);
-    setIsDrawerDisVisible(false);
-    setIsDrawerMegaVisible(false);
-  };
-  const showDrawerDis = () => {
-    setIsDrawerDisVisible(true);
-  };
+
   const showDrawerMega = () => {
     setIsDrawerMegaVisible(true);
   };
@@ -161,25 +132,25 @@ const newTellerDashboard = () => {
           <div className="text-custom-gray mx-3 mt-20">
             <ul className="my-4">
               <li className="my-7">
-                <a href="" className="flex gap-2">
+                <a href="/overview" className="flex gap-2">
                   <img src={Trans} alt="trans" className="h-fit" />
                   <p>Overview</p>
                 </a>
               </li>
               <li className="my-7">
-                <a href="" className="flex gap-2">
+                <a href="/transactions" className="flex gap-2">
                   <img src={Trans} alt="trans" className="h-fit" />
                   <p>Transactions</p>
                 </a>
               </li>
               <li className="my-7">
-                <a href="" className="flex gap-2">
+                <a href="/subs" className="flex gap-2">
                   <img src={Subsc} alt="trans" className="h-fit" />
                   <p>Subscriptions</p>
                 </a>
               </li>
               <li className="my-7">
-                <a href="" className="flex gap-2 my-3">
+                <a href="/analyse" className="flex gap-2 my-3">
                   <img src={UsageAn} alt="trans" className="h-fit" />
                   <p>Usage Analysis</p>
                 </a>
@@ -204,7 +175,7 @@ const newTellerDashboard = () => {
                           ? "/dist_list"
                           : parentOption.menu_title === "Tellers"
                           ? "/teller_list"
-                          : "#"
+                          : "/home"
                       }
                     >
                       {parentOption.menu_title}
@@ -371,4 +342,4 @@ const newTellerDashboard = () => {
     </div>
   );
 };
-export default newTellerDashboard;
+export default NewTellerDashboard;

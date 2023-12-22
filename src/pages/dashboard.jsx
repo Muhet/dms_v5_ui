@@ -43,7 +43,7 @@ const Dashboard = () => {
               >
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <a
-                    href="#"
+                    href="home"
                     className="block py-2 px-4 hover:border-transparent transition duration-300 hover:text-black"
                   >
                     Distributors
@@ -65,7 +65,7 @@ const Dashboard = () => {
                 onClick={() => handleTableSelect("topups")}
               >
                 <a
-                  href="#"
+                  href="home"
                   className="block py-2 px-4 hover:border-transparent transition duration-300 hover:text-black"
                 >
                   TopUps
@@ -76,7 +76,7 @@ const Dashboard = () => {
                 onClick={() => handleTableSelect("sellers")}
               >
                 <a
-                  href="#"
+                  href="home"
                   className="block py-2 px-4 hover:border-transparent transition duration-300 hover:text-black"
                 >
                   Tellers

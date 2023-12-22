@@ -27,36 +27,23 @@ const antIcon = (
   />
 );
 
-const distributorTable = () => {
+const DistributorTable = () => {
   const dispatch = useDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [setFilteredDistributors] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [formData, setFormData] = useState({});
-  const { tellers, teller, tellertopup, loading } = useSelector(
+  const [currentPage] = useState(1);
+  const [, setSearchTerm] = useState("");
+  const { tellers, tellertopup, loading } = useSelector(
     (state) => state.tellers
   );
-  const [isLoading, setIsLoading] = useState(false);
+  const [, setIsLoading] = useState(false);
   const { distributors } = useSelector((state) => state.distributors);
   const [, setPartnerIdFilled] = useState(true);
-  const [pageSize, setPageSize] = useState(5);
-  const [page, setPage] = useState(1);
+  const [pageSize] = useState(5);
   const [, updatedData] = useState({});
-  const [, setTableHeight] = useState("");
-  const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
-  const [selectedDistributor, setSelectedDistributor] = useState({});
-  const [isUpdateDrawerVisible, setIsUpdateDrawerVisible] = useState(false);
-  const [selectedDistributorForEdit, setSelectedDistributorForEdit] = useState(
-    {}
-  );
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState(false);
   const [selectedDistributorId, setSelectedDistributorId] = useState(null);
-  const [verificationRequest, setVerificationRequest] = useState({});
-  const [selectedRadio, setSelectedRadio] = useState("");
   const [showNewDistributorForm, setShowNewDistributorForm] = useState(false);
   const [showTellerUpdateForm, setShowTellerUpdateForm] = useState(false);
-  const [newDistributorFormData, setNewDistributorFormData] = useState({});
   const [selectedTellerId, setSelectedTellerId] = useState(null);
   let selectedDistributors = null;
   let selectedTellers = null;
@@ -152,7 +139,7 @@ const distributorTable = () => {
 
   const getDistributorFullName = (distributorId) => {
     const distributor = distributors.find(
-      (d) => d.distributor_id == distributorId
+      (d) => d.distributor_id === distributorId
     );
     return distributor ? distributor.dist_full_name : "";
   };
@@ -202,6 +189,9 @@ const distributorTable = () => {
   const userTellers = tellers.filter(
     (teller) => teller && teller.distributor_id === decode.user_id
   );
+  const openTopupDrawer = () => {
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="text-xs">
@@ -599,4 +589,4 @@ const distributorTable = () => {
     </div>
   );
 };
-export default distributorTable;
+export default DistributorTable;

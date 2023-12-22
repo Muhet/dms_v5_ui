@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { login } from "../../redux/action/userAction";
-
+import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -21,22 +21,24 @@ import Trans from "../../assets/images/icons/transactions.png";
 import Subsc from "../../assets/images/icons/subscriptions.png";
 import { ToastContainer } from "react-toastify";
 import { NavLink } from "react-router-dom";
-const navbar = () => {
+const Navbar = () => {
+  const location = useLocation();
   const [user_name, setUser_name] = useState("");
   const [password, setPassword] = useState("");
   const [, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const [, setPartnerIdFilled] = useState(true);
   const [showMegaDealerAddModel, setShowMegaDealerAddModel] = useState(false);
-
+  const [, setShowRenewModal] = useState(false);
   const [formData, setFormData] = useState({});
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [activeParentOption] = useState(null);
   const userData = getData().data?.menu_list;
   const access_token = getToken();
   const decode = jwtDecode(access_token);
-  const { provinces, distProvince, district, sector, cell, distributor } =
-    useSelector((state) => state.distributors);
+  const { provinces, distProvince, district, sector, cell } = useSelector(
+    (state) => state.distributors
+  );
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [, setSelectedProvinceId] = useState("");
   const [, setSelectedDistrictId] = useState("");
@@ -108,6 +110,8 @@ const navbar = () => {
   const handleRenewModalClose = () => {
     setShowRenewModal(false);
   };
+  console.log(handleRenewModalClose);
+
   const handleMegaDealerSubmit = (e) => {
     e.preventDefault();
     const { cell, district, province, sector, ...filteredData } = formData;
@@ -115,7 +119,7 @@ const navbar = () => {
       ...filteredData,
       user_id: decode.user_id,
     };
-    if (decode.access_level == 5) {
+    if (decode.access_level === "5") {
       console.log("Dispatched distributor", combinedData);
       dispatch(addDistributor(combinedData));
     } else {
@@ -296,6 +300,8 @@ const navbar = () => {
                                 } else if (
                                   childOption.menu_title === "New Customer Sale"
                                 ) {
+                                  window.location.href = "/new_subs";
+                                } else {
                                   window.location.href = "/new_subs";
                                 }
                               }}
@@ -557,4 +563,4 @@ const navbar = () => {
     </div>
   );
 };
-export default navbar;
+export default Navbar;

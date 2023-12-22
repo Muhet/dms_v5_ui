@@ -7,7 +7,7 @@ import { CiSettings } from "react-icons/ci";
 import { IoIosLogIn } from "react-icons/io";
 import { LiaUserEditSolid } from "react-icons/lia";
 import jwtDecode from "jwt-decode";
-const newHeader = () => {
+const Newheader = () => {
   const token = getToken();
   const decode = jwtDecode(token);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -31,7 +31,7 @@ const newHeader = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  });
 
   const handleLogout = () => {
     deleteToken();
@@ -131,4 +131,4 @@ const newHeader = () => {
     </div>
   );
 };
-export default newHeader;
+export default Newheader;

@@ -3,40 +3,32 @@ import { FaSearch } from "react-icons/fa";
 import { CiWallet } from "react-icons/ci";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Pagination, Spin, Modal, Popover, Drawer } from "antd";
+import { Popover, Drawer } from "antd";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { MdOutlineModeEdit, MdOutlineDeleteSweep } from "react-icons/md";
-import { BiDotsHorizontalRounded } from "react-icons/bi";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   getDistributorTopUps,
-  getDistributors,
   addTopup,
-  updateTopup,
   approveDistributor,
 } from "../../redux/reducer/distributorSlice";
 import { getToken } from "../../utils/authToken";
 import jwtDecode from "jwt-decode";
-const distributorTable = ({ setSearchTerm }) => {
+const DistributorTable = ({ setSearchTerm }) => {
   const dispatch = useDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
-  const [page, setPage] = useState(1);
+  const [currentPage] = useState(1);
+  const [pageSize] = useState(5);
+
   const [, updatedData] = useState({});
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [, setPartnerIdFilled] = useState(true);
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [formData, setFormData] = useState({});
   const [isApproveDrawerVisible, setIsApproveDrawerVisible] = useState(false);
   const [selectedDistributorId, setSelectedDistributorId] = useState(null);
-  const [destributorData, setdestributorData] = useState({});
+
   const [showNewDistributorForm, setShowNewDistributorForm] = useState(false);
-  const [selectedDistributorForEdit, setSelectedDistributorForEdit] = useState(
-    {}
-  );
-  const { DistTopup, distributor, distributors, loading } = useSelector(
-    (state) => state.distributors
-  );
+  const [selectedDistributorForEdit] = useState({});
+  const { DistTopup, distributor } = useSelector((state) => state.distributors);
   const access_token = getToken();
   const decode = jwtDecode(access_token);
   let selectedDistributors = null;
@@ -47,6 +39,7 @@ const distributorTable = ({ setSearchTerm }) => {
   const handleNewDistributorClick = () => {
     setShowNewDistributorForm(true);
   };
+
   useEffect(() => {
     if (updatedData[0]) {
       setFormData(updatedData[0]);
@@ -60,18 +53,7 @@ const distributorTable = ({ setSearchTerm }) => {
 
     setPartnerIdFilled(!!value);
   };
-  const handleSubmitReqTopup = (e) => {
-    e.preventDefault();
-    const combinedData = {
-      ...formData,
-      created_by: decode.user_id,
-      teller_id: selectedDistributorId,
-    };
-    dispatch(topupTeller(combinedData));
-    setTimeout(() => {
-      setIsModalOpen(false);
-    }, 5000);
-  };
+
   const handleCancel = () => {
     setIsApproveDrawerVisible(false);
   };
@@ -109,11 +91,14 @@ const distributorTable = ({ setSearchTerm }) => {
     setIsApproveDrawerVisible(true);
     setFormData({ ...selectedDistributors });
   };
+  const handleUpdateDistributor = () => {};
+  const openTopupDrawer = () => {};
+
   const handleNewDistributorCancel = () => {
     setShowNewDistributorForm(false);
   };
   const distTops = DistTopup.filter(
-    (topups) => topups.created_by == decode.user_id
+    (topups) => topups.created_by === decode.user_id
   );
   const handleDistApprove = (e) => {
     e.preventDefault();
@@ -462,4 +447,4 @@ const distributorTable = ({ setSearchTerm }) => {
     </div>
   );
 };
-export default distributorTable;
+export default DistributorTable;

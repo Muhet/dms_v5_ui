@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
-import { CiWallet } from "react-icons/ci";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin, Modal, Popover } from "antd";
 import { ToastContainer } from "react-toastify";
@@ -8,8 +7,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { MdOutlineModeEdit, MdOutlineDeleteSweep } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { getTellerTopups } from "../../redux/reducer/tellerSlice";
-import { getDistributors } from "../../redux/reducer/distributorSlice";
+import {
+  getTellerTopups,
+  addTeller,
+  updateTeller,
+  topupTeller,
+} from "../../redux/reducer/tellerSlice";
+
 import { format } from "date-fns";
 import { getToken } from "../../utils/authToken";
 import jwtDecode from "jwt-decode";
@@ -23,45 +27,29 @@ const antIcon = (
   />
 );
 
-const distributorTable = () => {
+const DistributorTable = () => {
   const dispatch = useDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [setFilteredDistributors] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [, setSearchTerm] = useState("");
   const [formData, setFormData] = useState({});
-  const { tellers, teller, tellertopups, loading } = useSelector(
+  const { tellers, tellertopups, loading } = useSelector(
     (state) => state.tellers
   );
-  const [isLoading, setIsLoading] = useState(false);
+  const [, setIsLoading] = useState(false);
 
   const [, setPartnerIdFilled] = useState(true);
-  const [pageSize, setPageSize] = useState(5);
-  const [page, setPage] = useState(1);
   const [, updatedData] = useState({});
-  const [, setTableHeight] = useState("");
-  const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
-  const [selectedDistributor, setSelectedDistributor] = useState({});
-  const [isUpdateDrawerVisible, setIsUpdateDrawerVisible] = useState(false);
-  const [selectedDistributorForEdit, setSelectedDistributorForEdit] = useState(
-    {}
-  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDistributorId, setSelectedDistributorId] = useState(null);
-  const [verificationRequest, setVerificationRequest] = useState({});
-  const [selectedRadio, setSelectedRadio] = useState("");
   const [showNewDistributorForm, setShowNewDistributorForm] = useState(false);
   const [showTellerUpdateForm, setShowTellerUpdateForm] = useState(false);
-  const [newDistributorFormData, setNewDistributorFormData] = useState({});
   const [selectedTellerId, setSelectedTellerId] = useState(null);
   let selectedDistributors = null;
   let selectedTellers = null;
   const access_token = getToken();
   const decode = jwtDecode(access_token);
 
-  const handleNewDistributorClick = () => {
-    setShowNewDistributorForm(true);
-  };
+  const openTopupDrawer = () => {};
+
   const handleOpenTellerUpdateForm = (pdt_id) => {
     setSelectedTellerId(pdt_id);
     const foundTeller = tellers.find((distrib) => distrib.teller_id === pdt_id);
@@ -84,24 +72,7 @@ const distributorTable = () => {
       setFormData(updatedData[0]);
     }
   }, [tellertopups, updatedData]);
-  /*   const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    const combinedData = {
-      ...formData,
-      created_by: decode.user_id,
-      distributor_id: decode.user_id,
-    };
-    try {
-      dispatch(addTeller(combinedData));
-      setTimeout(() => {
-        setShowNewDistributorForm(false);
-      }, 5000);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-    setIsLoading(false);
-  }; */
+
   const handleTellerUpdate = (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -169,6 +140,8 @@ const distributorTable = () => {
     setIsModalOpen(true);
     setFormData({ ...selectedDistributors });
   };
+  console.log(showModal);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -205,9 +178,6 @@ const distributorTable = () => {
   useEffect(() => {
     dispatch(getTellerTopups());
   }, [dispatch]);
-  const userTellers = tellers.filter(
-    (teller) => teller && teller.distributor_id === decode.user_id
-  );
 
   return (
     <div className="text-xs">
@@ -562,4 +532,4 @@ const distributorTable = () => {
     </div>
   );
 };
-export default distributorTable;
+export default DistributorTable;

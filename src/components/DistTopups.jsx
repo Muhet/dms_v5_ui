@@ -23,7 +23,7 @@ const Table = () => {
   const access_token = getToken();
   const decode = jwtDecode(access_token);
   const [formData, setFormData] = useState({});
-  const { DistTopup, distributor, distributors, loading } = useSelector(
+  const { DistTopup, distributor, loading } = useSelector(
     (state) => state.distributors
   );
   const [, setPartnerIdFilled] = useState(true);
@@ -92,6 +92,8 @@ const Table = () => {
     setIsApproveDrawerVisible(false);
     setSelectedDistributorForEdit({});
   };
+  console.log(closeApproveDrawer);
+
   const handleUpdate = () => {
     dispatch(
       updateTopup({
@@ -186,7 +188,7 @@ const Table = () => {
     dispatch(addTopup(combinedData));
   };
   const tellerTopById = filteredDistTopup.filter(
-    (topups) => topups.created_by == decode.user_id
+    (topups) => topups.created_by === decode.user_id
   );
   console.log("This is Data", filteredDistTopup);
   console.log(decode.user_id, "This is user ID");
@@ -582,7 +584,6 @@ const Table = () => {
           placement="right"
           closable={true}
           onClose={handleCancel}
-          visible={isModalOpen}
           width={450}
         >
           <form className="space-y-6" action="#" method="PUT">
