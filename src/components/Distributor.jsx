@@ -137,6 +137,7 @@ const Table = () => {
       created_by: decode.user_id,
       teller_id: selectedDTellerId,
     };
+
     dispatch(topupTeller(combinedData));
   };
   const userTellers = tellers.filter(

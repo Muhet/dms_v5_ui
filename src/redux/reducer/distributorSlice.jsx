@@ -9,7 +9,7 @@ export const getDistributors = createAsyncThunk(
       const response = await HttpRequest.get(
         `${process.env.REACT_APP_BASE_URL_LOCAL}/distributors`
       );
-      console.log("Data", response);
+
       return response.data;
     } catch (error) {
       throw new Error("Failed to fetch distributors");
@@ -23,7 +23,7 @@ export const getProvinces = createAsyncThunk(
       const response = await HttpRequest.get(
         `${process.env.REACT_APP_BASE_URL_LOCAL}/geolocation`
       );
-      console.log("Data", response);
+
       return response.data;
     } catch (error) {
       throw new Error("Failed to fetch distributors");
@@ -37,7 +37,7 @@ export const getDistProvince = createAsyncThunk(
       const response = await HttpRequest.get(
         `${process.env.REACT_APP_BASE_URL_LOCAL}/geolocation/inprovince/${province_id}`
       );
-      console.log("Data", response);
+
       return response.data;
     } catch (error) {
       throw new Error("Failed to fetch distributors");
@@ -51,7 +51,7 @@ export const getDistrict = createAsyncThunk(
       const response = await HttpRequest.get(
         `${process.env.REACT_APP_BASE_URL_LOCAL}/geolocation/indistrict/${sector_id}`
       );
-      console.log("Data", response);
+
       return response.data;
     } catch (error) {
       throw new Error("Failed to fetch distributors");
@@ -65,7 +65,7 @@ export const getSector = createAsyncThunk(
       const response = await HttpRequest.get(
         `${process.env.REACT_APP_BASE_URL_LOCAL}/geolocation/insector/${sector_id}`
       );
-      console.log("Data", response);
+
       return response.data;
     } catch (error) {
       throw new Error("Failed to fetch distributors");
@@ -79,7 +79,7 @@ export const getCell = createAsyncThunk(
       const response = await HttpRequest.get(
         `${process.env.REACT_APP_BASE_URL_LOCAL}/geolocation/incell/${cell_id}`
       );
-      console.log("Data", response);
+
       return response.data;
     } catch (error) {
       throw new Error("Failed to fetch distributors");
@@ -93,7 +93,7 @@ export const getDistributorTopUps = createAsyncThunk(
       const response = await HttpRequest.get(
         `${process.env.REACT_APP_BASE_URL_LOCAL}/distributors/topup?limit=100`
       );
-      console.log("Data", response);
+
       return response.data;
     } catch (error) {
       throw new Error("Failed to fetch distributors top ups");
@@ -255,7 +255,7 @@ export const updateTopup = createAsyncThunk(
   async ({ distributorId, updatedData }) => {
     try {
       const response = await HttpRequest.put(
-        `${process.env.REACT_APP_BASE_URL}/distributors/topup/${distributorId}`,
+        `${process.env.REACT_APP_BASE_URL_LOCAL}/distributors/topup/${distributorId}`,
         updatedData
       );
 
@@ -296,7 +296,7 @@ export const updateDistributor = createAsyncThunk(
   async ({ distributorId, updatedData }) => {
     try {
       const response = await HttpRequest.put(
-        `${process.env.REACT_APP_BASE_URL}/distributors/${distributorId}`,
+        `${process.env.REACT_APP_BASE_URL_LOCAL}/distributors/${distributorId}`,
         updatedData
       );
 
@@ -527,7 +527,6 @@ const distributorSlice = createSlice({
       .addCase(addTopup.fulfilled, (state, action) => {
         state.loading = false;
         state.topup = action.payload;
-        toast.success("Updated Successfully");
       })
       .addCase(addTopup.rejected, (state, action) => {
         state.loading = false;

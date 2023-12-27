@@ -23,13 +23,13 @@ const Table = () => {
   const access_token = getToken();
   const decode = jwtDecode(access_token);
   const [formData, setFormData] = useState({});
-  const { DistTopup, distributor, distributors, loading } = useSelector(
+  const { DistTopup, distributor, loading } = useSelector(
     (state) => state.distributors
   );
   const [, setPartnerIdFilled] = useState(true);
   const [pageSize, setPageSize] = useState(5);
   const [page, setPage] = useState(1);
-  const [updatedData] = useState({});
+  const [, updatedData] = useState({});
   const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
   const [selectedDistributor, setSelectedDistributor] = useState({});
   const [isUpdateDrawerVisible, setIsUpdateDrawerVisible] = useState(false);
@@ -92,6 +92,8 @@ const Table = () => {
     setIsApproveDrawerVisible(false);
     setSelectedDistributorForEdit({});
   };
+  console.log(closeApproveDrawer);
+
   const handleUpdate = () => {
     dispatch(
       updateTopup({
@@ -186,9 +188,9 @@ const Table = () => {
     dispatch(addTopup(combinedData));
   };
   const tellerTopById = filteredDistTopup.filter(
-    (topups) => topups.distributor_id === decode.user_id
+    (topups) => topups.created_by === decode.user_id
   );
-  console.log(distributors, "This is user ID");
+  console.log("This is Data", filteredDistTopup);
   console.log(decode.user_id, "This is user ID");
   return (
     <div className="w-full">
@@ -315,19 +317,19 @@ const Table = () => {
                                     >
                                       Update
                                     </label>
-                                    {distributors?.distributor_type ===
-                                      "mega_dealer" && (
-                                      <label
-                                        className="cursor-pointer px-3 hover:text-green-400"
-                                        onClick={() =>
-                                          openApproveDrawer(
-                                            distributor?.request_id
-                                          )
-                                        }
-                                      >
-                                        Approve
-                                      </label>
-                                    )}
+                                    {/*   {distributors?.distributor_type ===
+                                      "mega_dealer" && ( */}
+                                    <label
+                                      className="cursor-pointer px-3 hover:text-green-400"
+                                      onClick={() =>
+                                        openApproveDrawer(
+                                          distributor?.request_id
+                                        )
+                                      }
+                                    >
+                                      Approve
+                                    </label>
+                                    {/*   )} */}
                                   </div>
                                 }
                                 trigger="click"
@@ -581,8 +583,7 @@ const Table = () => {
           title="Approve Top Up Request"
           placement="right"
           closable={true}
-          onClose={closeApproveDrawer}
-          visible={isApproveDrawerVisible}
+          onClose={handleCancel}
           width={450}
         >
           <form className="space-y-6" action="#" method="PUT">
@@ -609,8 +610,6 @@ const Table = () => {
                 >
                   <option value="">---Select----</option>
                   <option value="approved">Appoved</option>
-                  {/*  <option value="pending">pending</option>
-                   */}
                   <option value="cancelled">concelled</option>
                 </select>
               </div>

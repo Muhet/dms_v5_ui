@@ -21,7 +21,7 @@ const Table = ({ closeDrawer }) => {
   const [, setPartnerIdFilled] = useState(true);
   const [pageSize, setPageSize] = useState(5);
   const [page] = useState(1);
-  const [updatedData] = useState({});
+  const [, updatedData] = useState({});
   const token = getToken();
   const decode = jwtDecode(token);
   const [setIsDetailModalVisible] = useState(false);
@@ -39,7 +39,6 @@ const Table = ({ closeDrawer }) => {
     );
     console.log(openUpdateDrawer);
 
-    console.log("foundDistributor::", pdt_id);
     if (foundDistributor) {
       selectedDistributors = { ...foundDistributor };
       delete selectedDistributors.teller_id;
@@ -137,7 +136,7 @@ const Table = ({ closeDrawer }) => {
         <div className="mt-1">
           <input
             type="text"
-            value={formData.teller_id}
+            value={selectedDistributorId}
             onChange={(e) => handleOnChange("teller_id", e.target.value)}
             className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           />

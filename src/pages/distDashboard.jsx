@@ -3,14 +3,6 @@ import Header from "../components/distHeader";
 import Distributor from "../components/Distributor";
 import Topup from "../components/DistTopups";
 
-const Card = ({ label, value }) => (
-  <div className="border p-4 rounded-lg bg-blue-100 shadow-md">
-    <div className="text-blue-500 font-semibold text-lg">{label}</div>
-    <div className="text-gray-700 text-2xl">{value}</div>
-  </div>
-);
-console.log(Card);
-
 const NewDash = () => {
   const [activeTable, setActiveTable] = useState("distributors");
 
@@ -37,7 +29,7 @@ const NewDash = () => {
                   </li>
                   <li className="px-20 cursor-pointer hover:hover:text-red-500 duration-500">
                     <a
-                      href="/home"
+                      href="home"
                       className={`px-3 ${
                         activeTable === "topup" ? "active" : ""
                       }`}
