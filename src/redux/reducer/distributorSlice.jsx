@@ -225,21 +225,23 @@ export const addTopup = createAsyncThunk(
       const {
         distributor_id,
         amount_paid,
+        cheque_no,
         mode_of_payment,
         drawers_bank,
-        cheque_no,
         created_by,
-      } = response.data;
+      } = response?.data || {};
       if (response?.data) {
         toast.success(response?.resp_msg);
         return {
           distributor_id,
           amount_paid,
+          cheque_no,
           mode_of_payment,
           drawers_bank,
-          cheque_no,
           created_by,
         };
+      } else {
+        toast.error(response?.resp_msg);
       }
     } catch (e) {
       if (e?.response?.data) {

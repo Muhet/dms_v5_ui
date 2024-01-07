@@ -15,7 +15,6 @@ import DistTopups from "./../src/components/DistTopups";
 import NotFoundPage from "./pages/notFount";
 import TellersId from "./pages/tellerSummaryPage";
 import DistSummaryPage from "./pages/distSummaryPage";
-import Signin from "./pages/signin";
 import Login from "./pages/login";
 import DistLists from "./pages/distributorList";
 import Subscriber from "./pages/subscriberOutlet";
@@ -32,7 +31,6 @@ const App = () => {
     <div className="">
       <Router>
         <Routes>
-          <Route path="/signin" element={<Signin />} />
           <Route path="/login" element={<Login />} />
           <Route element={<ProtectedRoutes />}>
             <Route path="/dist_dashboard" element={<NewDash />} />

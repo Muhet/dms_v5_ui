@@ -20,7 +20,6 @@ const NewTellerDashboard = () => {
         setUser_name("");
         setPassword("");
         setIsLoading(false);
-        console.log("Response from login action:", response);
       })
       .catch((error) => {
         console.error("Error during login:", error);

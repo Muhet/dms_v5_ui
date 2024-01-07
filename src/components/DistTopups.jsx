@@ -329,7 +329,6 @@ const Table = () => {
                                     >
                                       Approve
                                     </label>
-                                    {/*   )} */}
                                   </div>
                                 }
                                 trigger="click"
@@ -640,22 +639,7 @@ const Table = () => {
       >
         <form className="space-y-6" action="#" method="POST">
           <ToastContainer position="top-right" autoClose={5000} />
-          {/*   <div>
-            <label className="block text-xs font-medium leading-6 text-gray-900">
-              Distributor Id
-            </label>
-            <div className="mt-1">
-              <input
-                type="text"
-                value={formData.distributor_id}
-                onChange={(e) =>
-                  handleOnChange("distributor_id", e.target.value)
-                }
-                required
-                className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-xs sm:leading-6"
-              />
-            </div>
-          </div> */}
+
           <div>
             <label
               htmlFor="amount_paid"
