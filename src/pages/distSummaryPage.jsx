@@ -155,7 +155,7 @@ const UserSummaryPage = () => {
                       </thead>
 
                       <tbody>
-                        {distbydistId.map((distributor, index) => (
+                        {distbydistId.map((distributor) => (
                           <tr className="border-b dark:border-neutral-100">
                             <td className="whitespace-nowrap px-1 py-2">
                               {distributor.request_id}

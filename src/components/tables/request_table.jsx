@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Popover, Drawer } from "antd";
 import { BiDotsVerticalRounded } from "react-icons/bi";
-import { MdOutlineModeEdit, MdOutlineDeleteSweep } from "react-icons/md";
+import { MdOutlineDeleteSweep } from "react-icons/md";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -25,10 +25,12 @@ const DistributorTable = ({ setSearchTerm }) => {
   const [formData, setFormData] = useState({});
   const [isApproveDrawerVisible, setIsApproveDrawerVisible] = useState(false);
   const [selectedDistributorId, setSelectedDistributorId] = useState(null);
-
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [showNewDistributorForm, setShowNewDistributorForm] = useState(false);
   const [selectedDistributorForEdit] = useState({});
-  const { DistTopup, distributor } = useSelector((state) => state.distributors);
+  const { DistTopup, distributor, distributors } = useSelector(
+    (state) => state.distributors
+  );
   const access_token = getToken();
   const decode = jwtDecode(access_token);
   let selectedDistributors = null;
@@ -91,8 +93,34 @@ const DistributorTable = ({ setSearchTerm }) => {
     setIsApproveDrawerVisible(true);
     setFormData({ ...selectedDistributors });
   };
-  const handleUpdateDistributor = () => {};
-  const openTopupDrawer = () => {};
+
+  const handleTopUpDistributor = (pdt_id) => {
+    setSelectedDistributorId(pdt_id);
+    const foundDistributor = distributors.find(
+      (distrib) => distrib.distributor_id === pdt_id
+    );
+
+    if (foundDistributor) {
+      selectedDistributors = { ...foundDistributor };
+      delete selectedDistributors.distributor_id;
+      delete selectedDistributors.distributor_status;
+      delete selectedDistributors.dist_full_name;
+      delete selectedDistributors.email_address;
+      delete selectedDistributors.distributor_type;
+      delete selectedDistributors.telephone_number;
+      delete selectedDistributors.dist_company_name;
+      delete selectedDistributors.village_id;
+      delete selectedDistributors.cheque_no;
+      delete selectedDistributors.distributor_account_balance;
+      delete selectedDistributors.distributor_available_balance;
+      delete selectedDistributors.last_update_at;
+      delete selectedDistributors.last_update_by;
+      delete selectedDistributors.last_update_to;
+    }
+
+    setIsModalVisible(true);
+    setFormData({ ...selectedDistributors });
+  };
 
   const handleNewDistributorCancel = () => {
     setShowNewDistributorForm(false);
@@ -124,6 +152,7 @@ const DistributorTable = ({ setSearchTerm }) => {
       })
     );
   };
+
   return (
     <div className="text-xs">
       <div className="flex justify-between">
@@ -136,7 +165,6 @@ const DistributorTable = ({ setSearchTerm }) => {
           Add New Request
         </button>
       </div>
-
       {isApproveDrawerVisible && (
         <Drawer
           title="Approve Top Up Request"
@@ -170,7 +198,7 @@ const DistributorTable = ({ setSearchTerm }) => {
                 >
                   <option value="">---Select----</option>
                   <option value="approved">Appoved</option>
-                  <option value="cancelled">concelled</option>
+                  <option value="rejected">Reject</option>
                 </select>
               </div>
             </div>
@@ -288,160 +316,132 @@ const DistributorTable = ({ setSearchTerm }) => {
           />
         </div>
         <div>
-          <table className="min-w-full text-left text-xs text-custom-light-gray font-Poppins">
-            <thead className="-top-2 border-b">
-              <tr className="">
-                <th scope="col" className="px-1 py-4">
-                  Request ID
-                </th>
+          <div className="overflow-y-auto h-96">
+            <table className="min-w-full text-left text-xs text-custom-light-gray font-Poppins">
+              <thead className="-top-2 border-b">
+                <tr className="">
+                  <th scope="col" className="px-1 py-4">
+                    Request ID
+                  </th>
 
-                <th scope="col" className="px-1 py-4">
-                  Purchase Date
-                </th>
-                <th scope="col" className="px-1 py-4">
-                  Drawers Bank
-                </th>
-                <th scope="col" className="px-1 py-4">
-                  Cheque No
-                </th>
-                <th scope="col" className="px-1 py-4">
-                  Payment Mode
-                </th>
-                <th scope="col" className="px-1 py-4">
-                  Amount Paid
-                </th>
-                <th scope="col" className="px-1 py-4">
-                  Status
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {distTops.map((topup) => (
-                <tr className="border-b dark:border-neutral-100 text-black font-extralight text-xs">
-                  <td className="whitespace-nowrap px-1 py-4">
-                    {topup.request_id}
-                  </td>
-                  <td className="whitespace-nowrap px-1 py-4">
-                    {topup.date_of_purchase}
-                  </td>
-                  <td className="whitespace-nowrap px-1 py-4">
-                    {topup.drawers_bank}
-                  </td>
-                  <td className="whitespace-nowrap px-1 py-4">
-                    {topup.cheque_no}
-                  </td>
-                  <td className="whitespace-nowrap px-1 py-4">
-                    {topup.mode_of_payment}
-                  </td>
-
-                  <td className="whitespace-nowrap px-1 py-4">
-                    {topup.amount_paid}
-                  </td>
-                  <td className="whitespace-nowrap px-1 py-4">
-                    {" "}
-                    <label
-                      className={`rounded-f py-1  rounded-full ${
-                        topup.request_status === "approved"
-                          ? "text-custom-green bg-custom-light-green  px-4"
-                          : topup.request_status === "canceled"
-                          ? "bg-custom-red text-white px-6"
-                          : topup.request_status === "pending"
-                          ? "bg-custom-light-orange text-custom-orange px-6"
-                          : ""
-                      }`}
-                    >
-                      {topup.request_status}
-                    </label>
-                  </td>
-                  <td className="whitespace-nowrap px-1 py-4">
-                    <Popover
-                      content={
-                        <div className="text-xs">
-                          <span className="flex -mb-2">
-                            <label className="mt-1">
-                              <MdOutlineModeEdit />
-                            </label>
-                            <label
-                              className="cursor-pointer px-3 hover:text-green-400"
-                              onClick={() =>
-                                handleUpdateDistributor(
-                                  distributor.distributor_id
-                                )
-                              }
-                            >
-                              Update topup
-                            </label>
-                          </span>
-                          <br />
-                          <span className="flex">
-                            <label className="mt-1">
-                              <CiWallet />
-                            </label>
-                            <label
-                              className="cursor-pointer px-3 hover:text-custom-light-blue"
-                              onClick={() => showModal(topup?.request_id)}
-                            >
-                              Approve Topup
-                            </label>
-                          </span>
-                          <hr className="mb-1 mt-2 -mx-2" />
-                          <span className="flex text-custom-red">
-                            <label className="-mr-2">
-                              <MdOutlineDeleteSweep size={20} />
-                            </label>
-                            <label
-                              className="cursor-pointer px-3 hover:text-green-400 "
-                              onClick={() =>
-                                openTopupDrawer(distributor?.distributor_id)
-                              }
-                            >
-                              Remove User
-                            </label>
-                          </span>
-                        </div>
-                      }
-                      trigger="click"
-                    >
-                      <BiDotsVerticalRounded className="text-custom-gray cursor-pointer" />
-                    </Popover>
-                  </td>
-                  {/* <td className="whitespace-nowrap px-1 py-4">
-                    <Popover
-                      content={
-                        <div className="space-x-2">
-                          <label
-                            className="cursor-pointer  hover:text-blue-400"
-                            onClick={() => showDetailModal(distributor)}
-                          >
-                            View
-                          </label>
-                          <label
-                            className="cursor-pointer px-3 hover:text-green-400"
-                            onClick={() =>
-                              openUpdateDrawer(distributor?.distributor_id)
-                            }
-                          >
-                            Update
-                          </label>
-                          <label
-                            className="cursor-pointer px-3 hover:text-green-400"
-                            onClick={() =>
-                              openTopupDrawer(distributor?.distributor_id)
-                            }
-                          >
-                            Topup
-                          </label>
-                        </div>
-                      }
-                      trigger="click"
-                    >
-                      <BiDotsHorizontalRounded className="text-custom-gra" />
-                    </Popover>
-                  </td> */}
+                  <th scope="col" className="px-1 py-4">
+                    Purchase Date
+                  </th>
+                  <th scope="col" className="px-1 py-4">
+                    Drawers Bank
+                  </th>
+                  <th scope="col" className="px-1 py-4">
+                    Cheque No
+                  </th>
+                  <th scope="col" className="px-1 py-4">
+                    Payment Mode
+                  </th>
+                  <th scope="col" className="px-1 py-4">
+                    Amount Paid
+                  </th>
+                  <th scope="col" className="px-1 py-4">
+                    Status
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {DistTopup.map((topup) => (
+                  <tr className="border-b dark:border-neutral-100 text-black font-extralight text-xs">
+                    <td className="whitespace-nowrap px-1 py-4">
+                      {topup.request_id}
+                    </td>
+                    <td className="whitespace-nowrap px-1 py-4">
+                      {topup.date_of_purchase}
+                    </td>
+                    <td className="whitespace-nowrap px-1 py-4">
+                      {topup.drawers_bank}
+                    </td>
+                    <td className="whitespace-nowrap px-1 py-4">
+                      {topup.cheque_no}
+                    </td>
+                    <td className="whitespace-nowrap px-1 py-4">
+                      {topup.mode_of_payment}
+                    </td>
+
+                    <td className="whitespace-nowrap px-1 py-4">
+                      {topup.amount_paid}
+                    </td>
+                    <td className="whitespace-nowrap px-1 py-4">
+                      {" "}
+                      <label
+                        className={`rounded-f py-1  rounded-full ${
+                          topup.request_status === "approved"
+                            ? "text-custom-green bg-custom-light-green  px-4"
+                            : topup.request_status === "rejected"
+                            ? "bg-custom-red text-white px-6"
+                            : topup.request_status === "pending"
+                            ? "bg-custom-light-orange text-custom-orange px-6"
+                            : ""
+                        }`}
+                      >
+                        {topup.request_status}
+                      </label>
+                    </td>
+                    <td className="whitespace-nowrap px-1 py-4">
+                      <Popover
+                        content={
+                          <div className="text-xs">
+                            {decode.access_level === "3" ? (
+                              <>
+                                <span className="flex">
+                                  <label className="mt-1">
+                                    <CiWallet />
+                                  </label>
+                                  <label
+                                    className="cursor-pointer px-3 hover:text-custom-light-blue"
+                                    onClick={() => showModal(topup?.request_id)}
+                                  >
+                                    Approve Topup
+                                  </label>
+                                </span>{" "}
+                                <span className="flex">
+                                  <label className="mt-1">
+                                    <CiWallet />
+                                  </label>
+                                  <label
+                                    className="cursor-pointer px-3 hover:text-custom-light-blue"
+                                    onClick={() =>
+                                      handleNewDistributorClick(
+                                        distributor?.distributor_id
+                                      )
+                                    }
+                                  >
+                                    Top up Acc.
+                                  </label>
+                                </span>
+                              </>
+                            ) : null}
+                            <hr className="mb-1 mt-2 -mx-2" />
+                            <span className="flex text-custom-red">
+                              <label className="-mr-2">
+                                <MdOutlineDeleteSweep size={20} />
+                              </label>
+                              <label
+                                className="cursor-pointer px-3 hover:text-green-400 "
+                                onClick={() =>
+                                  openTopupDrawer(distributor?.distributor_id)
+                                }
+                              >
+                                Remove User
+                              </label>
+                            </span>
+                          </div>
+                        }
+                        trigger="click"
+                      >
+                        <BiDotsVerticalRounded className="text-custom-gray cursor-pointer" />
+                      </Popover>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

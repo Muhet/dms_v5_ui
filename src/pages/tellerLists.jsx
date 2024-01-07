@@ -246,7 +246,7 @@ const NewTellerDashboard = () => {
               </ul>
             )}
             {showPopModal && (
-              <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+              <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
                 <div className="bg-white px-4 rounded-md">
                   <div>
                     <form className="bg-custom-white p-4 mt-5 rounded-md text-sm space-y-4">

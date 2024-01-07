@@ -54,7 +54,7 @@ export const addTeller = createAsyncThunk(
       );
 
       if (response?.data) {
-        /*     socket.send(JSON.stringify({ type: "newTeller", data: response.data })); */
+        socket.send(JSON.stringify({ type: "newTeller", data: response.data }));
         toast.success(response?.resp_msg);
         return response.data;
       }

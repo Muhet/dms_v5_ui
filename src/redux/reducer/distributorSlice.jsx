@@ -16,6 +16,7 @@ export const getDistributors = createAsyncThunk(
     }
   }
 );
+
 export const getProvinces = createAsyncThunk(
   "distributors/getProvinces",
   async () => {
@@ -30,6 +31,17 @@ export const getProvinces = createAsyncThunk(
     }
   }
 );
+export const getBanks = createAsyncThunk("distributors/getBanks", async () => {
+  try {
+    const response = await HttpRequest.get(
+      `${process.env.REACT_APP_BASE_URL_LOCAL}/banks`
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch banks");
+  }
+});
 export const getDistProvince = createAsyncThunk(
   "distributors/getDistProvince",
   async ({ province_id }) => {
@@ -225,21 +237,23 @@ export const addTopup = createAsyncThunk(
       const {
         distributor_id,
         amount_paid,
+        cheque_no,
         mode_of_payment,
         drawers_bank,
-        cheque_no,
         created_by,
-      } = response.data;
+      } = response?.data || {};
       if (response?.data) {
         toast.success(response?.resp_msg);
         return {
           distributor_id,
           amount_paid,
+          cheque_no,
           mode_of_payment,
           drawers_bank,
-          cheque_no,
           created_by,
         };
+      } else {
+        toast.error(response?.resp_msg);
       }
     } catch (e) {
       if (e?.response?.data) {
@@ -384,6 +398,17 @@ const distributorSlice = createSlice({
       .addCase(getDistributors.rejected, (state) => {
         state.loading = false;
       })
+      .addCase(getBanks.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getBanks.fulfilled, (state, action) => {
+        state.loading = false;
+        state.banks = action.payload;
+      })
+      .addCase(getBanks.rejected, (state) => {
+        state.loading = false;
+      })
+
       .addCase(getDistributorTopUps.pending, (state) => {
         state.loading = true;
       })

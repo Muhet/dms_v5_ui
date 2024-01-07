@@ -3,6 +3,8 @@ import { login } from "../../redux/action/userAction";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 import {
   addMegaDealer,
   addDistributor,
@@ -18,9 +20,19 @@ import jwtDecode from "jwt-decode";
 import UsageAn from "../../assets/images/icons/usageAnalysis.png";
 import Dist from "../../assets/images/icons/distributors.png";
 import Trans from "../../assets/images/icons/transactions.png";
+import Overview from "../../assets/images/icons/airplay.png";
 import Subsc from "../../assets/images/icons/subscriptions.png";
 import { ToastContainer } from "react-toastify";
 import { NavLink } from "react-router-dom";
+const antIcon = (
+  <LoadingOutlined
+    style={{
+      fontSize: 24,
+      color: "white",
+    }}
+    spin
+  />
+);
 const Navbar = () => {
   const location = useLocation();
   const [user_name, setUser_name] = useState("");
@@ -36,9 +48,8 @@ const Navbar = () => {
   const userData = getData().data?.menu_list;
   const access_token = getToken();
   const decode = jwtDecode(access_token);
-  const { provinces, distProvince, district, sector, cell } = useSelector(
-    (state) => state.distributors
-  );
+  const { provinces, distProvince, district, sector, cell, loading } =
+    useSelector((state) => state.distributors);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [, setSelectedProvinceId] = useState("");
   const [, setSelectedDistrictId] = useState("");
@@ -110,7 +121,6 @@ const Navbar = () => {
   const handleRenewModalClose = () => {
     setShowRenewModal(false);
   };
-  console.log(handleRenewModalClose);
 
   const handleMegaDealerSubmit = (e) => {
     e.preventDefault();
@@ -139,9 +149,9 @@ const Navbar = () => {
   const handleMouseLeave = () => {
     setActiveDropdown(null);
   };
+
   return (
-    <div className="left-0">
-      {" "}
+    <div className="fixed left-0">
       <label>
         <span className="text-white font-semibold text-4xl flex mt-10 mx-7">
           D<p className="text-custom-yellow">s</p>M
@@ -155,7 +165,7 @@ const Navbar = () => {
             }`}
           >
             <a href="/" className="flex gap-2">
-              <img src={Trans} alt="trans" className="h-fit" />
+              <img src={Overview} alt="trans" className="h-fit" />
               <p>Overview</p>
             </a>
           </li>
@@ -169,21 +179,23 @@ const Navbar = () => {
               <p>Transactions</p>
             </a>
           </li>
-          <li
-            className={`my-7 px-3 ${
-              location.pathname.includes("/subscriber") ||
-              location.pathname.includes("/new_subs")
-                ? "activeLink"
-                : ""
-            }`}
-            onMouseEnter={handleSubscriptionHoverEnter}
-          >
-            <a href="/subscriber" className="flex gap-2">
-              <img src={Subsc} alt="trans" className="h-fit" />
-              <p>Subscriptions</p>
-            </a>
-          </li>
-          {showSubscriptionModal && (
+          {decode.access_level === "8" && (
+            <li
+              className={`my-7 px-3 ${
+                location.pathname.includes("/subscriber") ||
+                location.pathname.includes("/new_subs")
+                  ? "activeLink"
+                  : ""
+              }`}
+              onMouseEnter={handleSubscriptionHoverEnter}
+            >
+              <a href="/subscriber" className="flex gap-2">
+                <img src={Subsc} alt="trans" className="h-fit" />
+                <p>Subscriptions</p>
+              </a>
+            </li>
+          )}
+          {decode.access_level === "8" && showSubscriptionModal && (
             <div className="popup-model bg-custom-main-gray -mt-5 text-custom-white rounded-md p-3">
               <ul onMouseLeave={handleSubscriptionHoverLeave}>
                 <span
@@ -248,7 +260,7 @@ const Navbar = () => {
                       : parentOption.menu_title === "Tellers"
                       ? "/teller_list"
                       : parentOption.menu_title === "Sales"
-                      ? "/subscriber"
+                      ? "/distributors"
                       : "#"
                   }
                 >
@@ -301,8 +313,17 @@ const Navbar = () => {
                                   childOption.menu_title === "New Customer Sale"
                                 ) {
                                   window.location.href = "/new_subs";
-                                } else {
-                                  window.location.href = "/new_subs";
+                                } else if (
+                                  childOption.menu_title ===
+                                  "Distributor Top Up Statement"
+                                ) {
+                                  window.location.href = "/request_list";
+                                } else if (
+                                  childOption.menu_title ===
+                                  "Approve Distributor Top Up"
+                                ) {
+                                  window.location.href =
+                                    "/pending_request_list";
                                 }
                               }}
                             >
@@ -318,8 +339,8 @@ const Navbar = () => {
           </ul>
         )}
         {showMegaDealerAddModel && (
-          <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-            <div className="w-max flex justify-center bg-white px-4 rounded-md">
+          <div className="fixed top-0 left-0 z-50 w-full h-full flex items-center  justify-center bg-black bg-opacity-40">
+            <div className="w-max ml-32 flex justify-center bg-white px-4 rounded-md">
               <div>
                 <form className="bg-custom-white p-4 mt-5 rounded-md text-sm space-y-4">
                   <ToastContainer position="top-right" autoClose={5000} />
@@ -508,7 +529,6 @@ const Navbar = () => {
                         }
                         className="block w-full outline-none rounded-md border-0 px-4 py-3 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-xs sm:leading-6"
                       >
-                        <option value="">---Select---</option>
                         {cell &&
                           cell.map((village) => (
                             <option
@@ -537,7 +557,7 @@ const Navbar = () => {
                   </div>
                   <div className="flex justify-between mt-7">
                     <div></div>
-                    <div className="space-x-8 ">
+                    <div className="flex gap-4">
                       <button
                         type="button"
                         className="text-custom-red"
@@ -547,10 +567,11 @@ const Navbar = () => {
                       </button>
                       <button
                         type="button"
-                        className="bg-custom-light-blue text-custom-white px-4 py-3 hover:bg-custom-dark-blue duration-400 rounded-md"
+                        className="bg-custom-light-blue text-custom-white px-2 mt-4 rounded-md py-2 w-full"
                         onClick={handleMegaDealerSubmit}
+                        disabled={loading}
                       >
-                        Registor
+                        {loading ? <Spin indicator={antIcon} /> : "Registor"}
                       </button>
                     </div>
                   </div>

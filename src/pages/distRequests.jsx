@@ -1,5 +1,6 @@
 import React from "react";
 import Trans from "./../assets/images/icons/transactions.png";
+import Overview from "./../assets/images/icons/airplay.png";
 import Subsc from "./../assets/images/icons/subscriptions.png";
 import UsageAn from "./../assets/images/icons/usageAnalysis.png";
 import Dist from "./../assets/images/icons/distributors.png";
@@ -23,7 +24,7 @@ const NewTellerDashboard = () => {
             <ul className="my-4">
               <li className="my-7">
                 <a href="/home" className="flex gap-2">
-                  <img src={Trans} alt="trans" className="h-fit" />
+                  <img src={Overview} alt="trans" className="h-fit" />
                   <p>Overview</p>
                 </a>
               </li>
@@ -34,7 +35,7 @@ const NewTellerDashboard = () => {
                 </a>
               </li>
               <li className="my-7">
-                <a href="/requests" className="flex gap-2">
+                <a href="/request_list" className="flex gap-2">
                   <img src={Subsc} alt="trans" className="h-fit" />
                   <p>Requests</p>
                 </a>
@@ -52,7 +53,7 @@ const NewTellerDashboard = () => {
             <ul className="my-4 ">
               <li className="my-2">
                 <a
-                  href="/home"
+                  href="/distributors"
                   className="flex gap-2 hover:bg-custom-white duration-700 hover:bg-opacity-30 p-3 rounded-lg"
                 >
                   <img src={Dist} alt="trans" className="h-fit" />
@@ -61,7 +62,7 @@ const NewTellerDashboard = () => {
               </li>
               <li className="my-2">
                 <a
-                  href="/distributors"
+                  href="/teller_list"
                   className="flex gap-2 hover:bg-custom-white duration-700 hover:bg-opacity-30 p-3 rounded-lg"
                 >
                   <img src={Tellers} alt="trans" className="h-fit" />
